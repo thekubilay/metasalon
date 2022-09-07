@@ -1,0 +1,14 @@
+body {
+  overflow: hidden;
+}
+body #app  {
+  height: 100vh;
+}
+body #app .pg  {
+  height: 100%;
+}
+
+.dg.ac {
+  /*display: none;*/
+  z-index: 999 !important;
+}

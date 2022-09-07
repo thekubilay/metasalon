@@ -1,0 +1,74 @@
+/* sizes */
+.wh {
+  height: 100vh;
+}
+.ww {
+  width: 100%;
+}
+
+
+/* cursor */
+.pointer {
+  cursor: pointer;
+}
+
+/* position */
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+/* display */
+.block {
+  display: block;
+}
+
+.none {
+  display: none;
+}
+
+.disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+
+/* text align */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .6
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently                                   supported by Chrome and Opera */
+}
+
+

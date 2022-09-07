@@ -1,0 +1,40 @@
+{
+  "name": "metasalon",
+  "private": true,
+  "version": "1.0.10",
+  "scripts": {
+    "dev": "vite --host --port 3000",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@danielblagy/three-mmi": "^1.0.0",
+    "@dimforge/rapier3d": "^0.9.0",
+    "@seregpie/three.text-sprite": "^3.2.0",
+    "@vueuse/core": "^8.9.2",
+    "axios": "^0.27.2",
+    "cannon-es": "^0.19.0",
+    "cannon-es-debugger": "^1.0.0",
+    "gsap": "^3.11.0",
+    "peerjs": "^1.4.6",
+    "pinia": "^2.0.14",
+    "socket.io-client": "^4.5.1",
+    "swiper": "^8.3.2",
+    "three-css2drender": "^1.0.0",
+    "three-to-cannon": "^4.2.0",
+    "vue": "^3.2.25",
+    "vue-3-socket.io": "^1.0.5",
+    "vue-router": "^4.0.16"
+  },
+  "devDependencies": {
+    "@types/dat.gui": "^0.7.7",
+    "@types/node": "^18.0.0",
+    "@types/three": "^0.141.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "dat.gui": "^0.7.9",
+    "three": "^0.141.0",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.9",
+    "vue-tsc": "^0.34.7"
+  }
+}
