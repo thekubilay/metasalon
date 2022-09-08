@@ -172,7 +172,8 @@ export default class WebGL {
     if (settings.pointLight) this.scene.add(this.light.pointLight);
     if (settings.pointLightHelper) this.scene.add(this.light.pointLightHelper);
     if (settings.dirLight) this.scene.add(this.light.dirLight);
-    if (settings.dirLightHelper) this.scene.add(this.light.dirLightHelper);
+    // console.log(settings.dirLightHelper)
+    this.scene.add(this.light.dirLightHelper);
 
     return;
   }

@@ -34,7 +34,7 @@
               <span v-if="myself.sessionID !== ctc.sessionID && news.includes(ctc.sessionID)"
                     class="new-message"></span>
               <span v-if="myself.sessionID === ctc.sessionID" class="flex align-center justify-center myself pointer">
-              <span class="text">自分</span> <i class="fas fa-pen"></i></span>
+              <i class="fas fa-pen"></i></span>
             </button>
           </div>
         </div>
@@ -54,7 +54,7 @@ import PlayerChat from "@/components/player/PlayerChat.vue";
 import {nextTick, onMounted, PropType, ref, shallowRef, watch} from "vue";
 import {Player} from "@/types/Player";
 import useStore from "@/store/useStore";
-import ChatMessage from "@/helpers/compositions/useChatMessage";
+import ChatMessage from "@/composables/useChatMessage";
 import {SOCKET} from "@/plugins/socket";
 
 
@@ -91,6 +91,8 @@ watch(() => props.players, val => {
   position: fixed;
   border-radius: 10px;
   max-height: 90%;
+  width: 100%;
+  max-width: 144px;
   z-index: 99;
   right: 10px;
   bottom: 10px;
@@ -105,7 +107,7 @@ watch(() => props.players, val => {
 /* player */
 .players button.open {
   width: 100%;
-  min-width: 134px;
+  min-width: 100%;
   height: 40px;
   border: 0;
   border-radius: 8px;
@@ -157,16 +159,18 @@ watch(() => props.players, val => {
 }
 
 .players .container .player .chat {
-  width: 134px;
+  width: 70%;
 }
 
 .players .container .player .edit {
-  width: 50px;
+  width: 30%;
+  padding-bottom: 1px;
 }
 
 .players .container .player .edit i {
-  margin: 0 2px 0 4px;
-  font-size: .5rem;
+  padding: 4px 8px;
+  position: relative;
+  font-size: .6rem;
 }
 
 .players .container .player .chat span.name-txt {

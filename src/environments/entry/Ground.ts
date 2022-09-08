@@ -36,8 +36,13 @@ export default class Ground {
             mesh.rotation.y = -2.5
             mesh.position.set(-5, -2.65, 3.6)
             mesh.scale.set(2, 2, 2)
+              resolve(rocks)
             rocks.push(mesh)
-            resolve(rocks)
+            // this.vendor.fbx({path: "forest/test_tree2.fbx"}).then((mesh: any) => {
+            //   mesh.scale.set(0.005, 0.005, 0.005)
+            //   rocks.push(mesh)
+            // })
+
           })
         })
       })

@@ -5,8 +5,7 @@ import {ref, shallowRef} from "vue";
 import useStore from "@/store/useStore";
 
 export default function () {
-  const {myself, other, currentPlayerChatSession} = useStore()
-  const {focusToCanvas} = useStore()
+  const {myself, focusToCanvas} = useStore()
   const contact = ref<Player>({} as Player)
   const contactList = ref<Player[]>([])
   const component = shallowRef()
@@ -27,8 +26,8 @@ export default function () {
 
       if (messageFromIdx >= 0) {
         container.value[messageFromIdx].messages.push(data)
-        if (Object.keys(other.value).length) {
-          if (other.value.sessionID === data.fromSession) {
+        if (Object.keys(contact.value).length) {
+          if (contact.value.sessionID === data.fromSession) {
             messages.value = container.value[messageFromIdx].messages
           } else {
             message.value = data
@@ -40,8 +39,8 @@ export default function () {
         }
       } else {
         container.value.push({sessionID: data.fromSession, messages: [data]})
-        if (Object.keys(other.value).length) {
-          if (other.value.sessionID === data.fromSession) {
+        if (Object.keys(contact.value).length) {
+          if (contact.value.sessionID === data.fromSession) {
             messages.value.push(data)
           } else {
             message.value = data
@@ -81,11 +80,11 @@ export default function () {
   }
 
   const toggle = (param: string): void => {
-    if (param==="chat") {
+    if (param === "chat") {
       chatBox.value = !chatBox.value
       focusToCanvas.value = false
     } else {
-      import("../../components/dialog/DialogPlayerData.vue").then(val => {
+      import("../components/dialog/DialogPlayerData.vue").then(val => {
         component.value = val.default;
       }).then(() => {
         dialogBox.value = true
@@ -100,13 +99,15 @@ export default function () {
   }
 
   const select = (data: Player): void => {
-    const from: MessageFrom = container.value.find(from => from.sessionID === data.sessionID) || {} as MessageFrom
-    messages.value = Object.keys(from).length ? from.messages : []
-    other.value = data
+    if (myself.value.sessionID !== data.sessionID) {
+      const from: MessageFrom = container.value.find(from => from.sessionID === data.sessionID) || {} as MessageFrom
+      messages.value = Object.keys(from).length ? from.messages : []
+      contact.value = data
 
-    news.value = news.value.filter(item => {
-      return item !== data.sessionID
-    })
+      news.value = news.value.filter(item => {
+        return item !== data.sessionID
+      })
+    }
   }
 
 

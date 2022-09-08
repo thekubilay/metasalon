@@ -1,39 +1,38 @@
 <template>
-  <transition>
-    <div v-if="Object.keys(contact).length" ref="chat" class="player-chat outer">
-      <div class="inner">
-        <div class="header flex align-center column-1">
-          <div class="player flex justify-space-between column-1">
-            <h4 class="title flex align-center">{{ player.charNickname }}</h4>
-            <button v-if="player.audio && myself.audio" @click="call()" id="call" class="flex align-center justify-center pointer">
-              <i class="fa-solid fa-phone"></i>
-            </button>
+  <div v-if="Object.keys(contact).length" ref="chat" class="player-chat outer">
+    <div class="inner">
+      <div class="header flex align-center column-1">
+        <div class="contact flex justify-space-between column-1">
+          <h4 class="title flex align-center">{{ contact.charNickname }}</h4>
+          <button v-if="contact.audio && myself.audio" @click="call()" id="call"
+                  class="flex align-center justify-center pointer">
+            <i class="fa-solid fa-phone"></i>
+          </button>
 
-            <button @click="close()" id="close" class="flex align-center justify-center pointer">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        </div>
-        <div id="chatBody" class="body flex-column justify-start column-1" tabindex="0">
-          <div v-for="(msg, idx) in messages" :key="idx" class="message flex align-center"
-               :class="{local:msg.toSession === player.sessionID}">
-            <span class="text">{{ msg.body }}</span>
-            <span class="dt">{{ new Date(msg?.date).toLocaleTimeString("ja-JP").substring(0, 5) }}</span>
-          </div>
-        </div>
-        <div class="footer flex align-center column-1">
-          <input type="text" v-model="message" placeholder="メッセージ...">
-          <button @click="sendViaButton()" id="send">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2a1 1 0 0 1 .894.553l9 18a1 1 0 0 1-1.11 1.423L12 20.024l-8.783 1.952a1 1 0 0 1-1.111-1.423l9-18A1 1 0 0 1 12 2zm1 16.198l6.166 1.37L13 7.236v10.962zM11 7.236L4.834 19.568 11 18.198V7.236z"
-                fill="#0D0D0D"/>
-            </svg>
+          <button @click="close()" id="close" class="flex align-center justify-center pointer">
+            <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>
+      <div id="chatBody" class="body flex-column justify-start column-1" tabindex="0">
+        <div v-for="(msg, idx) in messages" :key="idx" class="message flex align-center"
+             :class="{local:msg.toSession === contact.sessionID}">
+          <span class="text">{{ msg.body }}</span>
+          <span class="dt">{{ new Date(msg?.date).toLocaleTimeString("ja-JP").substring(0, 5) }}</span>
+        </div>
+      </div>
+      <div class="footer flex align-center column-1">
+        <input type="text" v-model="message" placeholder="メッセージ...">
+        <button @click="sendViaButton()" id="send">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M12 2a1 1 0 0 1 .894.553l9 18a1 1 0 0 1-1.11 1.423L12 20.024l-8.783 1.952a1 1 0 0 1-1.111-1.423l9-18A1 1 0 0 1 12 2zm1 16.198l6.166 1.37L13 7.236v10.962zM11 7.236L4.834 19.568 11 18.198V7.236z"
+                fill="#0D0D0D"/>
+          </svg>
+        </button>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -319,7 +318,7 @@ watch(() => props.messages, value => {
   fill: #FFFFFF;
 }
 
-@media not all and (min-resolution:.001dpcm) {
+@media not all and (min-resolution: .001dpcm) {
   @media {
     .player-chat {
       position: fixed;
@@ -336,6 +335,7 @@ watch(() => props.messages, value => {
       z-index: 2;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
+
     .player-chat .header button {
       outline: 0;
       width: 30px;
@@ -358,6 +358,7 @@ watch(() => props.messages, value => {
       color: #e74c3c;
       font-size: 1.4rem;
     }
+
     .player-chat .header button#close i {
       position: relative;
       top: -2px;

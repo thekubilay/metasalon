@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 class Light {
-  ambientLight = new THREE.AmbientLight('#FFFFFF', 0.66);
+  ambientLight = new THREE.AmbientLight('#404040', 1);
   dirLight = {} as THREE.DirectionalLight;
   pointLight = {} as THREE.PointLight;
 
@@ -23,8 +23,8 @@ class Light {
     const settings = Object.assign(
       {
         color: '#FFFFFF',
-        intensity: 0.2,
-        position: [-40, 20, -40],
+        intensity: 2,
+        position: [0, 20, -40],
         castShadow: true,
         shadowCameraTop: 50,
         shadowCameraBottom: -50,
@@ -38,7 +38,8 @@ class Light {
       options,
     );
 
-    this.dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+
+    this.dirLight = new THREE.DirectionalLight(0xffffff, 2);
     this.dirLight.position.set(settings.position[0], settings.position[1], settings.position[2]);
     this.dirLight.castShadow = true;
     this.dirLight.shadow.camera.top = settings.shadowCameraTop;

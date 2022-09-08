@@ -51,6 +51,7 @@ export default function () {
       audioWith.value = data.from
       callData.value = data
       myself.value.audio = false
+      incoming.value = true
       SOCKET.emit('closeOrOpenAudio', {audio: false});
       ring.value.play();
     })

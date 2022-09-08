@@ -1,8 +1,8 @@
 <template>
-  <div class="stage-wrap pg" id="world">
-    <PlayerCall/>
-    <PlayerMenu/>
-    <PlayerList :players="players"/>
+  <div ref="world" id="world" class="stage-wrap pg">
+    <PlayerCall v-if="Object.keys(world).length"/>
+    <PlayerMenu v-if="Object.keys(world).length"/>
+    <PlayerList v-if="Object.keys(world).length" :players="players"/>
     <PlayerRotationKeys/>
     <canvas ref="canvas" id="canvas" class="stage" tabindex="-1"></canvas>
   </div>
@@ -14,21 +14,23 @@ import PlayerMenu from "@/components/player/PlayerMenu.vue";
 import PlayerList from "@/components/player/PlayerList.vue";
 import PlayerRotationKeys from "@/components/player/PlayerRotationKeys.vue";
 
-import {onBeforeUnmount, onMounted, reactive, ref, watch} from "vue";
+import {nextTick, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, watch} from "vue";
 import {Player} from "@/types/Player";
 import {SOCKET} from "@/plugins/socket";
 import useStore from "@/store/useStore";
 import {useIdGenerator} from "@/utils/useIdGenerator";
 import {getCookie} from "@/utils/useCookie";
+import {useRouter} from "vue-router";
 
 const {myself} = useStore();
+const router = useRouter()
+const world = ref<HTMLDivElement>({} as HTMLDivElement)
 const players = ref<Player[]>([])
+const nzwInfo: any = JSON.parse(sessionStorage.getItem("nazarev1") as string)
 const multiplayer = reactive<any>({
   start: () => {
-
     const nazarev1: any = JSON.parse(sessionStorage.getItem("nazarev1") as string)
     const sessionId = getCookie("sessionId")
-
     SOCKET.connect()
 
     SOCKET.auth = {
@@ -48,8 +50,6 @@ const multiplayer = reactive<any>({
         action: "Idle",
       }
     }
-    SOCKET.emit("join", "entry")
-
     SOCKET.on("self", data => {
       game.singleplayer(data)
     })
@@ -80,26 +80,30 @@ const multiplayer = reactive<any>({
 let game: any, entry: any;
 
 onMounted(async () => {
-  const nazare = await import("../nazare/Game")
-  const initEntry = await import("../environments/entry/Init")
+  if (nzwInfo) {
+    const nazare = await import("../nazare/Game")
+    const initEntry = await import("../environments/entry/Init")
+    game = await new nazare.default()
+    entry = await new initEntry.default()
+    nazareInit()
+  } else {
+    router.push({name: "SignIn"})
+  }
 
-  game = await new nazare.default()
-  entry = await new initEntry.default()
-
-  nazareInit()
 })
 
 onBeforeUnmount(() => {
-  nazareTerminate()
+  if (nzwInfo) nazareTerminate()
 })
 
 function nazareInit(): void {
   const settings = {
-    raycaster: true,
+    raycaster: false,
     canvas: "canvas",
     lights: {
-      pointLight: true,
+      // pointLight: true,
       dirLight: true,
+      dirLightHelper: true,
     },
   }
 

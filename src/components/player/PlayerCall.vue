@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 
-import useChatAudio from "@/helpers/compositions/useChatAudio";
+import useChatAudio from "@/composables/useChatAudio";
 import {nextTick, onBeforeUnmount, onMounted} from "vue";
 import useStore from "@/store/useStore";
 import {SOCKET} from "@/plugins/socket";
@@ -44,7 +44,7 @@ onMounted((): void => {
       SOCKET.on("disconnected", data => {
         emitDecline()
       })
-    },2000)
+    },10000)
   })
 })
 

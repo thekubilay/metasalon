@@ -40,12 +40,12 @@ export default class PlayerRotation extends PlayerInitialize {
 
   publish() {
     const args = {
-      x: this.object?.position.x,
-      y: this.object?.position.y,
-      z: this.object?.position.z,
-      heading: this.object?.rotation.y,
-      pb: this.object?.rotation.x,
-      action: this.action,
+      x: this.object?.position.x || 0,
+      y: this.object?.position.y || 0,
+      z: this.object?.position.z || 0,
+      heading: this.object?.rotation.y || 0,
+      pb: this.object?.rotation.x || 0,
+      action: this.action || "Idle",
     };
 
     SOCKET.emit("updatePosition", args)
