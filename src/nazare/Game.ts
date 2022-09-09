@@ -6,59 +6,68 @@ import Raycaster from '@/nazare/Raycaster';
 import KeyListener from '@/nazare/KeyListener';
 import PlayerInitialize from '@/nazare/PlayerInitialize';
 import PlayerRotation from '@/nazare/PlayerRotation';
-import {GameSettings} from '@/types/GameSetting';
-import {Player} from '@/types/Player';
 import Engine from "@/nazare/Engine";
 
-export default class Game extends WebGL {
-  multiplayer: null | { start: () => void, playerDataUpdate: (args: any) => void } = null;
-  playerData = {} as Player;
-  playerRotationClass = {} as PlayerRotation;
-  playersInitClasses = [] as PlayerInitialize[];
+import {GameSettings} from '@/types/GameSetting';
+import {Player} from '@/types/Player';
+import {MultiplayerSetting} from "@/types/GameSetting";
 
-  environments: any[] = [];
-  keyListener = new KeyListener();
-  raycaster = new Raycaster();
+export default class Game extends WebGL {
+  private isMultiplayerOn = false
+  private raycaster = new Raycaster();
   // physics = new MeshPhysic(this);
-  meshes = new Mesh();
-  engine = new Engine()
+  private meshes = new Mesh();
+
+  public multiplayer = {} as MultiplayerSetting;
+  public keyListener = new KeyListener();
+  public environments: any[] = [];
+  public playerData = {} as Player;
+  public engine = new Engine()
+  public playerRotationClass = {} as PlayerRotation;
+  public playersInitClasses = [] as PlayerInitialize[];
 
   constructor() {
     super();
   }
 
-  start(settings: GameSettings) {
+  public start(settings: GameSettings): void {
     super.init(settings).then(() => {
+
       this.engine.start();
-      this.meshes.create(this);
+
       this.keyListener.start();
       this.renderer.render(this.scene, this.camera);
 
-      if (this.multiplayer) {
-        this.multiplayer.start();
+      /* create environments */
+      this.environments = settings?.environments || []
+      this.meshes.create(this);
+
+      /* set multiplayer ability*/
+      this.multiplayer = settings?.multiplayer || {} as MultiplayerSetting
+
+      if (Object.keys(this.multiplayer).length) {
+        this.isMultiplayerOn = true
+        this.multiplayer?.start(this)
       }
 
-      if (settings.raycaster) {
-        this.raycaster.start()
-      }
+      if (settings.raycaster) this.raycaster.start()
 
     });
   }
 
-  singleplayer(data: Player | null): void {
+  public singleplayer(data: Player | null): void {
     if (data) this.playerData = data
     this.playerRotationClass = new PlayerRotation(this.playerData, true, this);
     this.render();
-
   }
 
-  setPlayerIntoGame(player: Player) {
+  public setPlayerIntoGame(player: Player) {
     /* player contains character information etc. */
     this.playersInitClasses.push(new PlayerInitialize(player, false, this));
   }
 
-  unsetPlayerFromGame(socketID: string) {
-    /* already created player class loop */
+  public unsetPlayerFromGame(socketID: string) {
+    /* already created player extract from scene */
     const character = this.playersInitClasses.find((playerInitialize) => {
       return playerInitialize.object.userData.socketID === socketID;
     });
@@ -68,42 +77,35 @@ export default class Game extends WebGL {
     this.scene.remove(character?.object as THREE.Object3D);
   }
 
-  setTimes(): void {
+  private setTimes(): void {
     this.delta = this.clock.getDelta();
     this.elapsedTime = this.clock.getElapsedTime();
   }
 
-  setRotationOnSelf(): void {
+  private setRotationOnSelf(): void {
     /* self rotate */
-    this.playerRotationClass.rotateAndMove();
+    this.playerRotationClass.rotateAndMove(this.settings.rotation = true);
   }
 
-  setRotationOnOtherPlayers(): void {
+  private setRotationOnOtherPlayers(): void {
     /* players x,y rotate update */
-    if (this.multiplayer){
+    if (this.isMultiplayerOn) {
       for (let i = this.playersInitClasses.length; i--;) {
         this.playersInitClasses[i].animate(this.delta);
       }
     }
   }
 
-  setRaycaster(): void {
+  private setRaycaster(): void {
     if (this.settings.raycaster) this.raycaster.update(this.camera, this.scene);
   }
 
-  render() {
+  private render() {
     this.engine.inLoop(() => {
-
-      this.delta = this.clock.getDelta();
-      this.elapsedTime = this.clock.getElapsedTime();
-
-      this.playerRotationClass.rotateAndMove();
-
-      for (let i = this.playersInitClasses.length; i--;) {
-        this.playersInitClasses[i].animate(this.delta);
-      }
-
-      this.raycaster.update(this.camera, this.scene);
+      this.setTimes()
+      this.setRotationOnSelf()
+      this.setRotationOnOtherPlayers()
+      this.setRaycaster()
 
       this.orbit.update()
       this.renderer.render(this.scene, this.camera)

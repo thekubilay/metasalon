@@ -16,7 +16,7 @@ export default class WebGL {
   public clock = new THREE.Clock();
   public gui = {} as GUI;
 
-  public sizes = {width: window.innerWidth, height: window.innerHeight};
+  public sizes = {width: window.innerWidth || 400, height: window.innerHeight || 400};
   public renderer = new THREE.WebGLRenderer();
   public camera = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 1, 5000);
   public light = new Light();
@@ -37,8 +37,10 @@ export default class WebGL {
         settings,
       );
 
+      this.settings = Object.assign({rotation: true}, settings)
+
       this.set_dev((settings.dev = {} as DevOption));
-      this.set_canvas(settings.canvas);
+      this.set_canvas(settings?.canvas || "canvas");
       this.set_renderer((settings.renderer = {} as RendererOption));
       this.set_camera((settings.camera = {} as CameraOption));
       this.set_orbit((settings.orbit = {} as OrbitOption));
@@ -80,14 +82,13 @@ export default class WebGL {
     const settings = Object.assign(
       {
         canvas: this.canvas,
-        alpha: false,
+        alpha: true,
         antialias: true,
       },
       options,
     );
 
     // this.settings.renderer = settings
-
     this.renderer = new THREE.WebGLRenderer(settings);
 
     if (pixelRatio === 1) this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -141,6 +142,7 @@ export default class WebGL {
         maxPolarAngle: Math.PI / 2 - 0.05,
         enableZoom: true,
         enableRotate: true,
+        enablePan: false,
       },
       options,
     );
@@ -151,6 +153,7 @@ export default class WebGL {
     this.orbit.maxPolarAngle = settings.maxPolarAngle;
     this.orbit.enableZoom = settings.enableZoom;
     this.orbit.enableRotate = settings.enableRotate;
+    this.orbit.enablePan = settings.enablePan;
     this.orbit.update();
     return;
   }
@@ -169,11 +172,11 @@ export default class WebGL {
 
     /* lights */
     if (settings.ambientLight) this.scene.add(this.light.ambientLight);
-    if (settings.pointLight) this.scene.add(this.light.pointLight);
+    // if (settings.pointLight) this.scene.add(this.light.pointLight);
     if (settings.pointLightHelper) this.scene.add(this.light.pointLightHelper);
     if (settings.dirLight) this.scene.add(this.light.dirLight);
-    // console.log(settings.dirLightHelper)
-    this.scene.add(this.light.dirLightHelper);
+    console.log(settings.dirLightHelper)
+    // this.scene.add(this.light.dirLightHelper);
 
     return;
   }

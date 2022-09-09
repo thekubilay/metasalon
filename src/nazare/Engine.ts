@@ -31,7 +31,8 @@ export default class Engine {
   start(): void {
     if (this.flag) return;
     this.flag = true;
-    this.animate();
+    // this.animate()
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   stop(): void {

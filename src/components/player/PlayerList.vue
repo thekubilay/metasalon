@@ -1,18 +1,19 @@
 <template>
   <teleport to="body">
+
     <MessageNotification :message="message"/>
 
     <component v-model="dialogBox" :is="component">
       <div class="form">
         <div class="row">
-          <label class="input-wrapper">
-            <span class="title">ユーザー名</span>
-            <input type="text" v-model="username">
+          <label class="input-wrapper flex-column">
+            <span class="title block" style="font-size: .7rem; margin-bottom: 5px; padding-left: 4px">ユーザー名</span>
+            <input style="height: 40px; border-radius: 8px; border: 1px solid #dcdde1; padding-left: 5px" type="text" v-model="username">
           </label>
         </div>
-        <div class="actions column-1 flex justify-space-between">
+        <div style="margin-top:14px;" class="actions column-1 flex justify-space-between">
           <button @click="close()" class="close flex align-center justify-center pointer">中止</button>
-          <button @click="save()" class="exit flex align-center justify-center pointer">ログアウト</button>
+          <button @click="save()" style="background-color: #3742fa" class="submit flex align-center justify-center pointer">登録</button>
         </div>
       </div>
     </component>

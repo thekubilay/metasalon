@@ -70,7 +70,7 @@ watch(() =>props.modelValue, val => {
 
 .dc .dialog.outer {
   width: 300px;
-  height: 150px;
+  height: auto;
   background: rgba(255, 255, 255, 0.2);
   padding: 8px;
   border-radius: 10px;

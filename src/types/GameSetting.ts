@@ -40,16 +40,23 @@ export interface LightOption {
   dirLightHelper: boolean;
 }
 
+export interface MultiplayerSetting {
+  start: (arg: any) => void,
+  updatePlayerData: (arg: any) => void
+}
+
 export interface GameSettings {
-  canvas: string;
-  raycaster: boolean;
+  canvas?: string;
+  raycaster?: boolean;
+  rotation?: boolean,
   sceneBg?: string;
   camera?: CameraOption;
   dev?: DevOption;
   nameTag?: boolean;
   windowSize?: WindowSize;
-  renderer: RendererOption;
+  renderer?: RendererOption;
   orbit?: OrbitOption;
   lights?: LightOption;
-  multiplayer?: () => void;
+  environments?: any[]
+  multiplayer?: MultiplayerSetting;
 }

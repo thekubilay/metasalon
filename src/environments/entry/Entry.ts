@@ -1,14 +1,10 @@
 import gsap from "gsap";
-import Sky from "@/environments/entry/Sky";
+import Map from "@/environments/entry/Map";
 import Flag from "@/environments/entry/Flag";
-import Ground from "@/environments/entry/Ground";
-import Portal from "@/environments/entry/Portal";
 
-export default class Init {
-  public sky = new Sky()
-  public ground = new Ground()
-  public flag = new Flag()
-  public portal = new Portal()
+export default class Entry {
+  private map = new Map()
+  private flag = new Flag()
 
   public entryAnim(game: any): void {
     // document.getElementById("canvas")!.focus()
@@ -45,13 +41,7 @@ export default class Init {
   }
 
   public publish(game: any): void {
-    // this.sky.publish().then(meshes => {
-    //   meshes.forEach((mesh: any) => {
-    //     game.scene.add(mesh)
-    //   })
-    // })
-
-    this.ground.publish().then(meshes => {
+    this.map.publish().then(meshes => {
       meshes.forEach((mesh: any) => {
         game.scene.add(mesh)
       })
@@ -63,11 +53,5 @@ export default class Init {
     //     game.scene.add(mesh)
     //   })
     // })
-
-    this.portal.publish().then(meshes => {
-      meshes.forEach((mesh: any) => {
-        game.scene.add(mesh)
-      })
-    })
   }
 }

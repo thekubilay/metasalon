@@ -94,8 +94,8 @@ export default function () {
   }
 
   const save = () => {
-    toggle("dialog")
     if (username.value.length) SOCKET.emit("updateInfo", username.value)
+    dialogBox.value = false
   }
 
   const select = (data: Player): void => {

@@ -51,7 +51,7 @@ const guestFormData = reactive<any>({
 */
 const sendSignIn = (event: any) => {
   if (guestFormData.name.value.length && guestFormData.character.value.length) {
-    sessionStorage.setItem('nazarev1', JSON.stringify({
+    sessionStorage.setItem('nzrsto', JSON.stringify({
       charNickname: guestFormData.name.value,
       charFilePath: guestFormData.character.value,
       roomUrlPath: "entry",

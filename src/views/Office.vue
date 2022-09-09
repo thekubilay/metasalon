@@ -10,30 +10,30 @@
 import PlayerCall from "@/components/player/PlayerCall.vue";
 import PlayerList from "@/components/player/PlayerList.vue";
 
-import {onBeforeUnmount, onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
-import {GameSettings} from "@/types/GameSetting";
+import {onBeforeUnmount, onMounted, reactive, ref, watch} from "vue";
 import useStore from "@/store/useStore";
+import {useRouter} from "vue-router";
 import useMultiplayer from "@/composables/useMultiplayer";
-
 import Game from "@/nazare/Game";
-import Entry from "@/environments/entry/Entry";
-
+import Office from "@/environments/office/Office";
+import {GameSettings} from "@/types/GameSetting";
+import {Player} from "@/types/Player";
 
 const {myself} = useStore();
-const {players, multiplayer} = useMultiplayer("entry")
+const {players, multiplayer} = useMultiplayer("office")
 const router = useRouter()
 const world = ref<HTMLDivElement>({} as HTMLDivElement)
 const game = new Game()
-const entry = new Entry()
+const office = new Office()
 
 const settings = {
   multiplayer: multiplayer,
-  environments: [entry]
+  environments: [office]
 } as GameSettings
 
 onMounted(async () => {
   await game.start(settings)
+
 })
 
 onBeforeUnmount(() => {

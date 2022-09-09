@@ -17,6 +17,11 @@ let routes: Array<RouteRecordRaw> = [
     name: 'Entry',
     component: () => import('../views/Entry.vue')
   },
+  {
+    path: '/office',
+    name: 'Office',
+    component: () => import('../views/Office.vue')
+  },
   // { path: '/:pathMatch(.*)*', redirect: "404" },
 ]
 

@@ -55,11 +55,12 @@ export default class PlayerInitialize {
         this.object = new THREE.Object3D();
         this.object.userData = this.playerData.charData as object;
         this.object.add(char);
-        this.game.scene.add(this.object);
+
 
         const toPlayClip = THREE.AnimationClip.findByName(this.clips, 'Idle');
         const toPlayAction = this.mixer?.clipAction(toPlayClip);
         toPlayAction?.play();
+        this.game.scene.add(this.object);
       },
       (xhr) => {
         // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')

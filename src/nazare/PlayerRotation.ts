@@ -40,21 +40,23 @@ export default class PlayerRotation extends PlayerInitialize {
 
   publish() {
     const args = {
-      x: this.object?.position.x || 0,
-      y: this.object?.position.y || 0,
-      z: this.object?.position.z || 0,
-      heading: this.object?.rotation.y || 0,
-      pb: this.object?.rotation.x || 0,
+      x: this.object?.position.x,
+      y: this.object?.position.y,
+      z: this.object?.position.z,
+      heading: this.object?.rotation.y,
+      pb: this.object?.rotation.x,
       action: this.action || "Idle",
     };
 
-    SOCKET.emit("updatePosition", args)
+    /* publishing current position with other users*/
+    this.game.multiplayer.updatePlayerData(args)
   }
 
-  rotateAndMove() {
+  rotateAndMove(rotation:boolean) {
     this.animate();
 
-    if (this.action !== 'Idle') {
+    if (this.action !== 'Idle' && rotation) {
+
       // calculate towards camera direction
       const angleYCameraDirection = Math.atan2(
         this.game.camera.position.x - this.object.position.x,

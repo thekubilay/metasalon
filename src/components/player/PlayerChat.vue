@@ -174,7 +174,7 @@ watch(() => props.messages, value => {
   height: 49px;
   width: 100%;
   padding: 10px;
-  border-radius: 14px;
+  border-radius: 10px;
   background-color: #FFFFFF;
   box-shadow: rgba(0, 0, 0, 0.01) 0px 3px 5px;
 }

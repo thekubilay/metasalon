@@ -70,7 +70,7 @@ const sendSignIn = (event: any) => {
   service.signIn(data).then((response: any) => {
       if (response.data.hasOwnProperty("key")) {
         user.value = response.data
-        sessionStorage.setItem('nazarev1', JSON.stringify({
+        sessionStorage.setItem('nzrsto', JSON.stringify({
           key: response.data.key,
           charNickname: response.data.user.username || 'NULL',
           charFilePath: userFormData.character.value,
