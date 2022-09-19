@@ -20,18 +20,19 @@ export default class Engine {
   }
 
   animate(): void {
+    const self = this
     if (!this.flag) return;
     // this.callbacks.forEach((cb: any) => cb());
-    for (let i = this.callbacks.length; i--; ) {
-      this.callbacks[i]();
+    for (let i = self.callbacks.length; i--; ) {
+      self.callbacks[i]();
     }
-    requestAnimationFrame(this.animate.bind(this));
+
+    requestAnimationFrame(this.animate.bind(self));
   }
 
   start(): void {
     if (this.flag) return;
     this.flag = true;
-    // this.animate()
     requestAnimationFrame(this.animate.bind(this));
   }
 

@@ -18,7 +18,7 @@ let routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Entry.vue')
   },
   {
-    path: '/office',
+    path: '/office/:id',
     name: 'Office',
     component: () => import('../views/Office.vue')
   },

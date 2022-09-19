@@ -40,12 +40,13 @@ export default class WebGL {
       this.settings = Object.assign({rotation: true}, settings)
 
       this.set_dev((settings.dev = {} as DevOption));
+
       this.set_canvas(settings?.canvas || "canvas");
-      this.set_renderer((settings.renderer = {} as RendererOption));
-      this.set_camera((settings.camera = {} as CameraOption));
-      this.set_orbit((settings.orbit = {} as OrbitOption));
-      this.set_nameTag((settings.nameTag = false));
-      this.set_lights((settings.lights = {} as LightOption));
+      this.set_renderer((settings.renderer as RendererOption));
+      this.set_camera((settings.camera as CameraOption));
+      this.set_orbit((settings.orbit as OrbitOption));
+      this.set_tags((settings.tags || false));
+      this.set_lights((settings.lights as LightOption));
 
       this.scene.background = new THREE.Color(settings.sceneBg || '#70a1ff');
 
@@ -99,14 +100,13 @@ export default class WebGL {
     return;
   }
 
-  private set_nameTag(headTag = false): void {
-    if (headTag) {
-      this.tag.setSize(this.sizes.width, this.sizes.height);
-      this.tag.domElement.style.position = 'absolute';
-      this.tag.domElement.style.top = '0px';
-      this.tagWrap = document.getElementById('world') as HTMLDivElement;
-      this.tagWrap.appendChild(this.tag.domElement);
-    }
+  private set_tags(headTag = true): void {
+    console.log("ok")
+    this.tag.setSize(this.sizes.width, this.sizes.height);
+    this.tag.domElement.style.position = 'absolute';
+    this.tag.domElement.style.top = '0px';
+    this.tagWrap = document.getElementById('world') as HTMLDivElement;
+    this.tagWrap.appendChild(this.tag.domElement);
     return;
   }
 
@@ -116,12 +116,18 @@ export default class WebGL {
         fov: 45,
         width: this.sizes.width,
         height: this.sizes.height,
-        near: 1,
-        far: 5000,
-        position: [0, 0, 0],
+        near: .1,
+        far: 1000,
+        position: [0.15287136757105668, 3, 30.315925775403738],
+        // this.object.position.x = -23.377386369724398
+        // this.object.position.z = -0.005241572856506738
+
       },
       options,
     );
+    // this.gui.add(this.camera.position, "x", 0, 20)
+    // this.gui.add(this.camera.position, "y", 0, 20)
+    // this.gui.add(this.camera.position, "z", 0, 20)
 
     this.camera.fov = settings.fov;
     this.camera.aspect = settings.width / settings.height;
@@ -172,10 +178,9 @@ export default class WebGL {
 
     /* lights */
     if (settings.ambientLight) this.scene.add(this.light.ambientLight);
-    // if (settings.pointLight) this.scene.add(this.light.pointLight);
+    if (settings.pointLight) this.scene.add(this.light.pointLight);
     if (settings.pointLightHelper) this.scene.add(this.light.pointLightHelper);
     if (settings.dirLight) this.scene.add(this.light.dirLight);
-    console.log(settings.dirLightHelper)
     // this.scene.add(this.light.dirLightHelper);
 
     return;

@@ -12,7 +12,7 @@
           </label>
         </div>
         <div style="margin-top:14px;" class="actions column-1 flex justify-space-between">
-          <button @click="close()" class="close flex align-center justify-center pointer">中止</button>
+          <button @click="dialogBox=false" class="close flex align-center justify-center pointer">中止</button>
           <button @click="save()" style="background-color: #3742fa" class="submit flex align-center justify-center pointer">登録</button>
         </div>
       </div>
@@ -65,11 +65,9 @@ const props = defineProps({
 const {myself} = useStore()
 const {
   component, dialogBox,
-  contactList, contact, chatBox, news, messages, message,
+  contactList, contact, chatBox, news, messages, message, username,
   initMessageSystem, toggle, select, save,
 } = ChatMessage()
-const username = ref<string>("")
-
 
 onMounted((): void => {
   nextTick(() => {

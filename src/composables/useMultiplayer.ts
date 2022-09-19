@@ -6,7 +6,7 @@ import CharacterInfo, {Player} from "@/types/Player";
 import {MultiplayerSetting} from "@/types/GameSetting";
 import useStore from "@/store/useStore";
 
-export default function (room:string) {
+export default function (room:string, positionUpdate=true) {
   const {myself} = useStore()
   const players = ref<Player[]>([])
   const storage = JSON.parse(sessionStorage.getItem("nzrsto") as string) as CharacterInfo
@@ -18,8 +18,9 @@ export default function (room:string) {
 
       SOCKET.auth = {
         self: false,
-        room: "office",
+        room: room,
         sessionID: sessionId ? sessionId : useIdGenerator(),
+        staff: storage.key,
         charNickname: storage.charNickname,
         charFormat: storage.charFormat,
         charFilePath: storage.charFilePath,
@@ -40,13 +41,15 @@ export default function (room:string) {
 
       SOCKET.on("updatePositions", data => {
         players.value = data
-        for (let i = data.length; i--;) {
-          if (data[i].socketID !== game.playerData.socketID && data[i].room === room) {
-            const idx: number = game.playersInitClasses.findIndex((item: any) => item.playerData.socketID === data[i].socketID);
-            if (idx >= 0) {
-              game.playersInitClasses[idx].playerData = data[i];
-            } else {
-              game.setPlayerIntoGame(data[i]);
+        if (positionUpdate){
+          for (let i = data.length; i--;) {
+            if (data[i].socketID !== game.playerData.socketID && data[i].room === room) {
+              const idx: number = game.playersInitClasses.findIndex((item: any) => item.playerData.socketID === data[i].socketID);
+              if (idx >= 0) {
+                game.playersInitClasses[idx].playerData = data[i];
+              } else {
+                game.setPlayerIntoGame(data[i]);
+              }
             }
           }
         }
@@ -61,6 +64,6 @@ export default function (room:string) {
     }
   })
   return {
-    players, multiplayer
+    players, multiplayer, storage
   }
 }

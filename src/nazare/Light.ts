@@ -40,7 +40,7 @@ class Light {
     );
 
 
-    this.dirLight = new THREE.DirectionalLight(0xffffff, .5);
+    this.dirLight = new THREE.DirectionalLight(0xffffff, .8);
     this.dirLight.position.set(settings.position[0], settings.position[1], settings.position[2]);
     this.dirLight.castShadow = true;
     this.dirLight.shadow.camera.top = settings.shadowCameraTop;

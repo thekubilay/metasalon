@@ -15,6 +15,7 @@ export default interface CharacterInfo {
   charFormat: string,
   charFilePath: string,
   charRoom: string,
+  key: string,
   charActive?: boolean,
 }
 

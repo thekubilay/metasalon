@@ -37,7 +37,7 @@ export default class Entry {
   }
 
   public update(): void {
-    // this.flag.update()
+    this.flag.update()
   }
 
   public publish(game: any): void {
@@ -48,10 +48,10 @@ export default class Entry {
     })
 
 
-    // this.flag.publish().then(meshes => {
-    //   meshes.forEach((mesh: any) => {
-    //     game.scene.add(mesh)
-    //   })
-    // })
+    this.flag.publish().then(meshes => {
+      meshes.forEach((mesh: any) => {
+        game.scene.add(mesh)
+      })
+    })
   }
 }

@@ -2,10 +2,10 @@
   <form class="form" @submit.prevent @submit="sendSignIn($event)">
     <!-- name -->
     <InputText v-model="guestFormData"
-                type="text"
-                name="name"
-                label="ニックネーム"
-                placeholder="shiva"/>
+               type="text"
+               name="name"
+               label="ニックネーム"
+               placeholder="shiva"/>
     <!-- character -->
     <InputCharacter v-model="guestFormData"
                     :characters="characters"/>
@@ -22,15 +22,16 @@
 
 <script lang="ts" setup>
 import {ref, reactive} from 'vue'
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import InputText from "@/components/inputs/InputText.vue";
 import InputCharacter from "@/components/inputs/InputCharacter.vue";
 
-const characters = ["models/soldier.glb", "models/robot.glb", "models/female.glb", "chara02", "chara03", "chara04", "chara05", "chara06", "chara07", "chara08"]
+const characters = ["characters/man.glb", "characters/man2.glb", "characters/man3.glb", "characters/woman.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
 
 /*
 *to display error
 */
+const route = useRoute()
 const router = useRouter()
 const errors = ref<[string, string[]][]>();
 const guestFormData = reactive<any>({
@@ -42,7 +43,7 @@ const guestFormData = reactive<any>({
   character: {
     required: true,
     error: null,
-    value: "models/female.glb",
+    value: "characters/man.glb",
   }
 })
 
@@ -57,7 +58,11 @@ const sendSignIn = (event: any) => {
       roomUrlPath: "entry",
     }))
 
-    router.push({name: "Entry"})
+    if (route.query.hasOwnProperty("office")) {
+      router.push({name: "Office", params: {id: route.query.office as string}})
+    } else {
+      router.push({name: "Entry"})
+    }
 
     errors.value = []
 

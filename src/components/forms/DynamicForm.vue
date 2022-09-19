@@ -25,14 +25,14 @@
     </div>
 
     <!-- sns menu -->
-    <div class="sns-container">
-      <p class="lead">またはSNSアカウントでログイン <span class="belt"></span></p>
-      <ul class="providers flex-column justify-center">
-        <li class="provider-item flex align-center justify-center">
-          <img src="/images/sns/google.png" alt="google"><span class="text">Googleアカウント</span>
-        </li>
-      </ul>
-    </div>
+<!--    <div class="sns-container">-->
+<!--      <p class="lead">またはSNSアカウントでログイン <span class="belt"></span></p>-->
+<!--      <ul class="providers flex-column justify-center">-->
+<!--        <li class="provider-item flex align-center justify-center">-->
+<!--          <img src="/images/sns/google.png" alt="google"><span class="text">Googleアカウント</span>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
   </div>
 </template>
 

@@ -23,24 +23,22 @@ export default class PlayerInitialize {
     this.game = game;
     this.self = self;
     this.playerData = playerData;
-    // this.nameTag = createNameTag(this.playerData.charNickname as string, this.playerData.sessionID, this.self) as CSS2DObject
-    // this.nameTag.position.y = this.nameTag.position.y + 2.1
+    // if (this.game.settings.nameTag) {
+    //   this.nameTag = createNameTag(this.playerData.charNickname as string, this.playerData.sessionID, this.self) as CSS2DObject
+    //   this.nameTag.position.y = this.nameTag.position.y + 2.1
+    // }
     this.init();
   }
 
   init() {
-    const model = this.playerData.charFilePath || "models/soldier.glb"
+    const model = this.playerData.charFilePath || "characters/man.glb"
+    // const model = "characters/woman3.glb"
     const gltfLoader = new GLTFLoader();
-
     gltfLoader.load(model, (gltf) => {
-
         const char: any = gltf.scene;
-
         // object.add(this.nameTag)
-
         char.name = this.playerData.charNickname;
         char.mixer = new THREE.AnimationMixer(char);
-        // object.scale.set(0.1, 0.1, 0.1)
         this.root = char;
         this.mixer = char.mixer;
         this.clips = gltf.animations.filter((item) => item.name !== 'TPose');
@@ -54,6 +52,8 @@ export default class PlayerInitialize {
 
         this.object = new THREE.Object3D();
         this.object.userData = this.playerData.charData as object;
+        this.object.position.x = 0.15287136757105668
+        this.object.position.z = 23.315925775403738
         this.object.add(char);
 
 

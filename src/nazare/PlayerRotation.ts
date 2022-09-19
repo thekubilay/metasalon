@@ -85,13 +85,16 @@ export default class PlayerRotation extends PlayerInitialize {
 
       this.object.position.x += moveX;
       this.object.position.z += moveZ;
+      // console.log(this.object.position.x, this.object.position.z)
 
       /* update camera target */
       this.game.camera.position.x += moveX;
       this.game.camera.position.z += moveZ;
       this.cameraTarget.x = this.object.position.x as number;
-      this.cameraTarget.y = (this.object.position.y as number) + 1;
-      this.cameraTarget.z = (this.object.position.z as number) - 0.4;
+      // this.cameraTarget.y = (this.object.position.y as number) + 1;
+      // this.cameraTarget.z = (this.object.position.z as number) - 0.4;
+      this.cameraTarget.y = (this.object.position.y as number);
+      this.cameraTarget.z = (this.object.position.z as number);
       this.game.orbit.target = this.cameraTarget;
     }
 

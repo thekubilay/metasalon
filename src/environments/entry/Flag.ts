@@ -12,8 +12,8 @@ export default class Flag {
           const f = {
             rotation: {x: 0, y: -2.46, z: 0},
             position: {x: 8, y: 6.5, z: 10},
-            frontSrc: "forest/tennouji_poster.jpg",
-            backSrc: "forest/fukushima_poster.jpg",
+            frontSrc: "images/tennouji_poster.jpg",
+            backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
             segH: 7.5,
           };
@@ -24,8 +24,8 @@ export default class Flag {
           const f = {
             rotation: {x: 0, y: 1.2, z: 0},
             position: {x: -12.2, y: 6.5, z: -3.5},
-            frontSrc: "forest/tanimachi_poster.jpg",
-            backSrc: "forest/fukushima_poster.jpg",
+            frontSrc: "images/tanimachi_poster.jpg",
+            backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
             segH: 7.5,
           };
@@ -35,8 +35,8 @@ export default class Flag {
           const f = {
             rotation: {x: 0, y: 0, z: 0},
             position: {x: 0, y: 6.5, z: -12.5},
-            frontSrc: "forest/matsuyamachi_poster.jpg",
-            backSrc: "forest/fukushima_poster.jpg",
+            frontSrc: "images/matsuyamachi_poster.jpg",
+            backSrc: "images/fukushima_poster.jpg",
 
             segW: 6.3,
             segH: 7.5,
@@ -47,8 +47,8 @@ export default class Flag {
           const f = {
             rotation: {x: 0, y: -1.3, z: 0},
             position: {x: 12, y: 6.5, z: -3.4},
-            frontSrc: "forest/kitasenri_poster.jpg",
-            backSrc: "forest/fukushima_poster.jpg",
+            frontSrc: "images/kitasenri_poster.jpg",
+            backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
             segH: 7.5,
           };
@@ -59,8 +59,8 @@ export default class Flag {
           const f = {
             rotation: {x: 0, y: -3.78, z: 0},
             position: {x: -7, y: 6.5, z: 10.1},
-            frontSrc: "forest/fukushima_poster.jpg",
-            backSrc: "forest/fukushima_poster.jpg",
+            frontSrc: "images/fukushima_poster.jpg",
+            backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
             segH: 7.5,
           };

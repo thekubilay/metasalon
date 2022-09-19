@@ -34,13 +34,14 @@ import InputCharacter from "@/components/inputs/InputCharacter.vue";
 import RequestService from '@/services/RequestService';
 
 import {ref, reactive} from 'vue'
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {FormData} from '@/types/Form';
 import useStore from "@/store/useStore";
 
 const {user} = useStore()
+const route = useRoute()
 const router = useRouter()
-const characters = ["models/soldier.glb", "models/robot.glb", "chara01", "chara02", "chara03", "chara04", "chara05", "chara06", "chara07", "chara08"]
+const characters = ["characters/man.glb", "characters/man2.glb", "characters/man3.glb", "characters/woman.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
 const errors = ref<[string, string[]][]>();
 const userFormData = reactive<FormData>({
   email: {
@@ -56,7 +57,7 @@ const userFormData = reactive<FormData>({
   character: {
     required: true,
     error: null,
-    value: "models/soldier.glb",
+    value: "characters/soldier.glb",
   }
 })
 
@@ -68,34 +69,39 @@ const sendSignIn = (event: any) => {
   userFormData.character.error = null
   const data = {email: userFormData.email.value, password: userFormData.password.value}
   service.signIn(data).then((response: any) => {
-      if (response.data.hasOwnProperty("key")) {
-        user.value = response.data
-        sessionStorage.setItem('nzrsto', JSON.stringify({
-          key: response.data.key,
-          charNickname: response.data.user.username || 'NULL',
-          charFilePath: userFormData.character.value,
-          roomUrlPath: "entry",
-        }))
-        router.push({name: "Entry"})
-      }
-    },
-    (error) => {
-      Object.keys(error.response.data).forEach(errorKey => {
-        let flag = false
-        Object.keys(userFormData).forEach(formKey => {
-          if (errorKey === formKey) {
+        if (response.data.hasOwnProperty("key")) {
+          user.value = response.data
+          sessionStorage.setItem('nzrsto', JSON.stringify({
+            key: response.data.key,
+            charNickname: response.data.user.username || 'NULL',
+            charFilePath: userFormData.character.value,
+            roomUrlPath: "entry",
+          }))
+
+          if (route.query.hasOwnProperty("office")) {
+            router.push({name: "Office", params: {id: route.query.office as string}})
+          } else {
+            router.push({name: "Entry"})
+          }
+        }
+      },
+      (error) => {
+        Object.keys(error.response.data).forEach(errorKey => {
+          let flag = false
+          Object.keys(userFormData).forEach(formKey => {
+            if (errorKey === formKey) {
+              flag = true
+              userFormData[formKey].error = error.response.data[errorKey]
+            }
+          })
+
+          //other error
+          if (!flag) {
             flag = true
-            userFormData[formKey].error = error.response.data[errorKey]
+            errors.value?.push(error.response.data[errorKey])
           }
         })
-
-        //other error
-        if (!flag) {
-          flag = true
-          errors.value?.push(error.response.data[errorKey])
-        }
       })
-    })
 }
 
 const dynamicInputType = ref<"text" | "password">("password")

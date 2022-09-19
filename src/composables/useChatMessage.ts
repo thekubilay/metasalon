@@ -113,7 +113,7 @@ export default function () {
 
   return {
     component, dialogBox,
-    contactList, contact, chatBox, news, messages, message,
+    contactList, contact, chatBox, news, messages, message, username,
     initMessageSystem, toggle, select, save,
   }
 }

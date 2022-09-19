@@ -17,6 +17,7 @@ export default class Game extends WebGL {
   private raycaster = new Raycaster();
   // physics = new MeshPhysic(this);
   private meshes = new Mesh();
+  private teleportAlert = false;
 
   public multiplayer = {} as MultiplayerSetting;
   public keyListener = new KeyListener();
@@ -25,6 +26,7 @@ export default class Game extends WebGL {
   public engine = new Engine()
   public playerRotationClass = {} as PlayerRotation;
   public playersInitClasses = [] as PlayerInitialize[];
+
 
   constructor() {
     super();
@@ -38,7 +40,7 @@ export default class Game extends WebGL {
       this.keyListener.start();
       this.renderer.render(this.scene, this.camera);
 
-      /* create environments */
+      /* set environments */
       this.environments = settings?.environments || []
       this.meshes.create(this);
 
@@ -84,7 +86,7 @@ export default class Game extends WebGL {
 
   private setRotationOnSelf(): void {
     /* self rotate */
-    this.playerRotationClass.rotateAndMove(this.settings.rotation = true);
+    this.playerRotationClass.rotateAndMove(this.settings.rotation);
   }
 
   private setRotationOnOtherPlayers(): void {
@@ -100,16 +102,72 @@ export default class Game extends WebGL {
     if (this.settings.raycaster) this.raycaster.update(this.camera, this.scene);
   }
 
+  private setTeleportData(salonName: string, teleportID: string): void {
+    // console.log(salonName)
+    this.settings.rotation = false
+    const teleport = document.getElementById("dt") as HTMLDivElement
+    const pTag = document.getElementById("mapText") as HTMLParagraphElement
+    pTag.children[0].textContent = "ブランズ" + salonName + "のマンションサロンへ"
+    pTag.setAttribute("data-teleport", teleportID)
+    teleport.style.display = "flex"
+    this.teleportAlert = true
+  }
+
+  private setTeleportMachine(coords: { x: number, z: number }): void {
+    // if (this.teleportAlert) return
+    if ((coords.x >= 4.7 && coords.x <= 5.5) && (coords.z >= 6.5 && coords.z <= 7.5)) {
+      if (!this.teleportAlert) {
+        this.setTeleportData("天王寺勝山", "527218328")
+      }
+    } else if ((coords.x >= 7.7 && coords.x <= 8.6) && (coords.z <= -2.6 && coords.z >= -3.1)) {
+      if (!this.teleportAlert) {
+        this.setTeleportData("北千里", "902154407")
+      }
+    } else if ((coords.x <= -.1 && coords.x >= -.5) && (coords.z <= -8.5 && coords.z >= -9.1)) {
+      if (!this.teleportAlert) {
+        this.setTeleportData("大阪松屋町", "303512941")
+      }
+    } else if ((coords.x <= -8 && coords.x >= -8.5) && (coords.z <= -2.4 && coords.z >= -2.9)) {
+      if (!this.teleportAlert) {
+        this.setTeleportData("タワー谷町四丁目", "430972345")
+      }
+    } else if ((coords.x <= -4.3 && coords.x >= -5.1) && (coords.z >= 6.9 && coords.z <= 7.4)) {
+      if (!this.teleportAlert) {
+        this.setTeleportData("大阪福島", "371140418")
+      }
+    } else {
+      this.teleportAlert = false
+    }
+  }
+
   private render() {
-    this.engine.inLoop(() => {
+    this.renderer.setAnimationLoop(() => {
       this.setTimes()
       this.setRotationOnSelf()
       this.setRotationOnOtherPlayers()
       this.setRaycaster()
+      this.setTeleportMachine({
+        x: this.playerRotationClass.object.position.x,
+        z: this.playerRotationClass.object.position.z
+      })
 
+      this.environments.forEach(env => {
+        env.update()
+      })
       this.orbit.update()
       this.renderer.render(this.scene, this.camera)
-      // this.tag.render(this.scene, this.camera)
+      this.tag.render(this.scene, this.camera)
+
     })
+    // this.engine.inLoop(() => {
+    //   this.setTimes()
+    //   this.setRotationOnSelf()
+    //   this.setRotationOnOtherPlayers()
+    //   this.setRaycaster()
+    //
+    //   this.orbit.update()
+    //   this.renderer.render(this.scene, this.camera)
+    //   // this.tag.render(this.scene, this.camera)
+    // })
   }
 }

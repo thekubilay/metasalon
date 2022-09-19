@@ -2,6 +2,7 @@
   <div ref="world" id="world" class="stage-wrap pg">
     <PlayerCall v-if="Object.keys(world).length"/>
     <PlayerList v-if="Object.keys(world).length" :players="players"/>
+    <DialogTeleport v-model="dialog"></DialogTeleport>
     <canvas ref="canvas" id="canvas" class="stage" tabindex="-1"></canvas>
   </div>
 </template>
@@ -9,8 +10,9 @@
 <script lang="ts" setup>
 import PlayerCall from "@/components/player/PlayerCall.vue";
 import PlayerList from "@/components/player/PlayerList.vue";
+import DialogTeleport from "@/components/dialog/DialogTeleport.vue";
 
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {GameSettings} from "@/types/GameSetting";
 import useStore from "@/store/useStore";
@@ -26,18 +28,34 @@ const router = useRouter()
 const world = ref<HTMLDivElement>({} as HTMLDivElement)
 const game = new Game()
 const entry = new Entry()
+const dialog = ref<boolean>(true)
 
 const settings = {
   multiplayer: multiplayer,
+  rotation: true,
   environments: [entry]
 } as GameSettings
 
 onMounted(async () => {
   await game.start(settings)
+  await document.getElementById("canvas").focus()
 })
 
 onBeforeUnmount(() => {
+  game.engine.stop()
+  game.keyListener.stop()
+  game.scene.children.forEach(object => {
+    object.removeFromParent()
+  })
+})
 
+watch(dialog, val => {
+  if (!val){
+    game.settings.rotation = true
+    setTimeout(() => {
+      dialog.value = true
+    }, 1000)
+  }
 })
 
 
@@ -57,12 +75,7 @@ onBeforeUnmount(() => {
 .stage-wrap #popup > div {
   height: 358px;
   background-color: white;
-  /* transition: 0.4s 2.0s; */
 }
-
-/* #popup > div.loading {
-  height: 400px;
-} */
 
 /* Transitions */
 .v-enter-active,

@@ -10,6 +10,7 @@ interface State {
   focusToCanvas: boolean
   currentPlayerChatSession: Player|null,
   openWithNewMessage: Message|null
+  teleportMap: string,
 }
 export function state(): State {
   return {
@@ -20,5 +21,6 @@ export function state(): State {
     focusToCanvas: true,
     currentPlayerChatSession: null,
     openWithNewMessage: null,
+    teleportMap: "",
   }
 }

@@ -1,3 +1,8 @@
+.welcome {
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
 .name-tag-outer {
   width: auto;
   height: 40px;
