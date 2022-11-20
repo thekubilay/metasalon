@@ -11,6 +11,7 @@ import Engine from "@/nazare/Engine";
 import {GameSettings} from '@/types/GameSetting';
 import {Player} from '@/types/Player';
 import {MultiplayerSetting} from "@/types/GameSetting";
+import Physic from "@/nazare/Physic";
 
 export default class Game extends WebGL {
   private isMultiplayerOn = false
@@ -23,6 +24,8 @@ export default class Game extends WebGL {
   public keyListener = new KeyListener();
   public environments: any[] = [];
   public playerData = {} as Player;
+  public withStaff = false
+  public physics = new Physic(this)
   public engine = new Engine()
   public playerRotationClass = {} as PlayerRotation;
   public playersInitClasses = [] as PlayerInitialize[];
@@ -32,12 +35,13 @@ export default class Game extends WebGL {
     super();
   }
 
-  public start(settings: GameSettings): void {
+  public start(settings: GameSettings,): void {
     super.init(settings).then(() => {
 
       this.engine.start();
 
-      this.keyListener.start();
+      /* key listener start in entry environment */
+      // this.keyListener.start();
       this.renderer.render(this.scene, this.camera);
 
       /* set environments */
@@ -86,7 +90,7 @@ export default class Game extends WebGL {
 
   private setRotationOnSelf(): void {
     /* self rotate */
-    this.playerRotationClass.rotateAndMove(this.settings.rotation);
+    this.playerRotationClass.rotateAndMove(this.settings.rotation, this.physics.character);
   }
 
   private setRotationOnOtherPlayers(): void {
@@ -103,7 +107,6 @@ export default class Game extends WebGL {
   }
 
   private setTeleportData(salonName: string, teleportID: string): void {
-    // console.log(salonName)
     this.settings.rotation = false
     const teleport = document.getElementById("dt") as HTMLDivElement
     const pTag = document.getElementById("mapText") as HTMLParagraphElement
@@ -141,11 +144,12 @@ export default class Game extends WebGL {
   }
 
   private render() {
-    this.renderer.setAnimationLoop(() => {
+    this.engine.inLoop(() => {
       this.setTimes()
       this.setRotationOnSelf()
       this.setRotationOnOtherPlayers()
-      this.setRaycaster()
+
+      // this.setRaycaster()
       this.setTeleportMachine({
         x: this.playerRotationClass.object.position.x,
         z: this.playerRotationClass.object.position.z
@@ -154,20 +158,11 @@ export default class Game extends WebGL {
       this.environments.forEach(env => {
         env.update()
       })
+
+      this.physics.update()
       this.orbit.update()
       this.renderer.render(this.scene, this.camera)
       this.tag.render(this.scene, this.camera)
-
     })
-    // this.engine.inLoop(() => {
-    //   this.setTimes()
-    //   this.setRotationOnSelf()
-    //   this.setRotationOnOtherPlayers()
-    //   this.setRaycaster()
-    //
-    //   this.orbit.update()
-    //   this.renderer.render(this.scene, this.camera)
-    //   // this.tag.render(this.scene, this.camera)
-    // })
   }
 }

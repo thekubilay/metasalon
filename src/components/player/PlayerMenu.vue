@@ -1,34 +1,21 @@
 <template>
   <div class="player-menu flex">
-<!--    <div class="outer view flex">-->
-<!--      <div class="belt" :class="{active:myself.view === 'tpv'}"></div>-->
-<!--      <div @click="view('fpv')" class="inner flex align-center justify-center pointer" :class="{active:myself.view === 'fpv'}">-->
-<!--        <i class="fa-solid fa-eye"></i>-->
+
+<!--    <div class="outer audio flex">-->
+<!--      <div class="belt" :class="{active:!myself.audio}"></div>-->
+<!--      <div @click="audio()" class="inner flex align-center justify-center pointer" :class="{active:myself.audio}">-->
+<!--        <i class="fa-solid fa-phone"></i>-->
 <!--      </div>-->
-<!--      <div @click="view('tpv')" class="inner flex align-center justify-center pointer" :class="{active:myself.view === 'tpv'}">-->
-<!--        <i class="fa-solid fa-street-view"></i>-->
+<!--      <div @click="audio()" class="inner flex align-center justify-center pointer" :class="{active:!myself.audio}">-->
+<!--        <i class="fa-solid fa-phone-slash"></i>-->
 <!--      </div>-->
 <!--    </div>-->
 
-    <div class="outer audio flex">
-      <div class="belt" :class="{active:!myself.audio}"></div>
-      <div @click="audio()" class="inner flex align-center justify-center pointer" :class="{active:myself.audio}">
-        <i class="fa-solid fa-phone"></i>
-      </div>
-      <div @click="audio()" class="inner flex align-center justify-center pointer" :class="{active:!myself.audio}">
-        <i class="fa-solid fa-phone-slash"></i>
+    <div @click="exit()" class="outer exit">
+      <div class="inner flex align-center justify-center pointer">
+        <Icon icon="IconLogout" color="#FFFFFF" height="16px" width="16px" />
       </div>
     </div>
-
-<!--    <div @click="exit()" class="outer exit">-->
-<!--      <div class="inner flex align-center justify-center pointer">-->
-<!--        <Icon icon="IconLogout" color="#FFFFFF" height="16px" width="16px" />-->
-<!--      </div>-->
-<!--    </div>-->
-
-    <teleport to="body">
-      <component v-model="dialog" :is="component"></component>
-    </teleport>
   </div>
 </template>
 

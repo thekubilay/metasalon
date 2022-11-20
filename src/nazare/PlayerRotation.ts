@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import Game from '../nazare/Game';
 import PlayerInitialize from '../nazare/PlayerInitialize';
-import { A, D, DIRECTIONS, S, W } from '@/utils/directions';
-import { Player } from '@/types/Player';
-import {SOCKET} from "@/plugins/socket";
+import {A, D, DIRECTIONS, S, W, Forward, Backward, Left, Right, ARROWS} from '@/utils/directions';
+import {Player} from '@/types/Player';
+import Physic from "@/nazare/Physic";
 
 export default class PlayerRotation extends PlayerInitialize {
   game = {} as Game;
@@ -21,7 +21,7 @@ export default class PlayerRotation extends PlayerInitialize {
 
   animate() {
     this.mixer?.update(this.game.delta);
-    const direction = DIRECTIONS.some((key) => this.game.keyListener.keys[key]);
+    const direction = [...DIRECTIONS, ...ARROWS].some((key) => this.game.keyListener.keys[key]);
     const newAction = direction ? 'Run' : 'Idle';
 
     if (this.action !== newAction && this.clips.length) {
@@ -52,11 +52,20 @@ export default class PlayerRotation extends PlayerInitialize {
     this.game.multiplayer.updatePlayerData(args)
   }
 
-  rotateAndMove(rotation:boolean) {
+  rotateAndMove(rotation: boolean, characterPhysic: any) {
     this.animate();
+    const xDiff = Math.abs(characterPhysic.position.x) - Math.abs(this.object.position.x)
+    const zDiff = Math.abs(characterPhysic.position.z) - Math.abs(this.object.position.z)
+
+    if (xDiff > 2 || zDiff > 2){
+      characterPhysic.position.x = 0
+      characterPhysic.position.y = .5
+      characterPhysic.position.z = 21.315925775403738
+      this.object.position.x = characterPhysic.position.x
+      this.object.position.z = characterPhysic.position.z
+    }
 
     if (this.action !== 'Idle' && rotation) {
-
       // calculate towards camera direction
       const angleYCameraDirection = Math.atan2(
         this.game.camera.position.x - this.object.position.x,
@@ -83,17 +92,18 @@ export default class PlayerRotation extends PlayerInitialize {
       const moveX = this.walkDirection.x * velocity * this.game.delta;
       const moveZ = this.walkDirection.z * velocity * this.game.delta;
 
-      this.object.position.x += moveX;
-      this.object.position.z += moveZ;
-      // console.log(this.object.position.x, this.object.position.z)
+      characterPhysic.position.x += moveX;
+      characterPhysic.position.z += moveZ;
+
+      // this.object.position.copy(characterPhysic.position)
+      this.object.position.x = characterPhysic.position.x
+      this.object.position.z = characterPhysic.position.z
 
       /* update camera target */
       this.game.camera.position.x += moveX;
       this.game.camera.position.z += moveZ;
       this.cameraTarget.x = this.object.position.x as number;
-      // this.cameraTarget.y = (this.object.position.y as number) + 1;
-      // this.cameraTarget.z = (this.object.position.z as number) - 0.4;
-      this.cameraTarget.y = (this.object.position.y as number);
+      this.cameraTarget.y = (this.object.position.y as number) + 3;
       this.cameraTarget.z = (this.object.position.z as number);
       this.game.orbit.target = this.cameraTarget;
     }
@@ -103,24 +113,23 @@ export default class PlayerRotation extends PlayerInitialize {
 
   setMotion(keys: any) {
     let offset = 0; // w
-
-    if (keys[W]) {
-      if (keys[A]) {
+    if (keys[W] || keys[Forward]) {
+      if (keys[A] || keys[Left]) {
         offset = Math.PI / 4; // w+a
-      } else if (keys[D]) {
+      } else if (keys[D] || keys[Right]) {
         offset = -Math.PI / 4; // w+d
       }
-    } else if (keys[S]) {
-      if (keys[A]) {
+    } else if (keys[S] || keys[Backward]) {
+      if (keys[A] || keys[Left]) {
         offset = Math.PI / 4 + Math.PI / 2; // s+a
-      } else if (keys[D]) {
+      } else if (keys[D] || keys[Right]) {
         offset = -Math.PI / 4 - Math.PI / 2; // s+d
       } else {
         offset = Math.PI; // s
       }
-    } else if (keys[A]) {
+    } else if (keys[A] || keys[Left]) {
       offset = Math.PI / 2; // a
-    } else if (keys[D]) {
+    } else if (keys[D] || keys[Right]) {
       offset = -Math.PI / 2; // d
     }
 

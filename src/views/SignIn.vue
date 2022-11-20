@@ -10,10 +10,7 @@
         <h2 class="h2">メタサロンを<br>楽しもう！</h2>
         <p class="lead">最新のニュースやイベントなどの様々な情報を得ることができます。ぜひ、このワールドでバーチャルサロンを楽しんでください！</p>
       </div>
-      <div class="iframe-container">
-<!--        <iframe src='https://my.spline.design/hands3duicopy-7f2dfa5ad9392f8c9c5304158aa1b635/' frameborder='0'-->
-<!--                width='100%' height='100%'></iframe>-->
-      </div>
+      <div class="iframe-container"></div>
       <div class="footer"></div>
     </div>
   </div>

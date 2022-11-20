@@ -41,7 +41,7 @@ import useStore from "@/store/useStore";
 const {user} = useStore()
 const route = useRoute()
 const router = useRouter()
-const characters = ["characters/man.glb", "characters/man2.glb", "characters/man3.glb", "characters/woman.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
+const characters = ["characters/man2.glb", "characters/man3.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
 const errors = ref<[string, string[]][]>();
 const userFormData = reactive<FormData>({
   email: {
@@ -81,7 +81,8 @@ const sendSignIn = (event: any) => {
           if (route.query.hasOwnProperty("office")) {
             router.push({name: "Office", params: {id: route.query.office as string}})
           } else {
-            router.push({name: "Entry"})
+            router.push({name: "Onlines"})
+            // router.push({name: "Entry"})
           }
         }
       },

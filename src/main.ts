@@ -9,8 +9,7 @@ import "./assets/css/columns.css";
 import "./assets/css/flexbox.css";
 import "./assets/css/app.css";
 import "./assets/css/player.css";
-import "./assets/css/player.css";
-import "./assets/css/player.css";
+import "./assets/css/transitions.css";
 
 const app = createApp(App)
 const pinia = createPinia()

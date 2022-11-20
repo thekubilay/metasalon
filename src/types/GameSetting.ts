@@ -17,7 +17,7 @@ export interface CameraOption {
   width: number,
   height: number,
   far: number,
-  near:number,
+  near: number,
   position: number[],
 }
 
@@ -47,6 +47,7 @@ export interface MultiplayerSetting {
 }
 
 export interface GameSettings {
+  room: string,
   canvas?: string,
   raycaster?: boolean,
   rotation: boolean,

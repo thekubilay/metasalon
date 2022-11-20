@@ -28,5 +28,7 @@ export interface Player extends Partial<CharacterInfo> {
   view?: string,
   status?: string,
   charData?: CharData
+  room: string,
+  withStaff: boolean,
   new_messages?: boolean
 }

@@ -23,7 +23,7 @@ class Light {
     const settings = Object.assign(
       {
         color: '#FFFFFF',
-        intensity: 1,
+        intensity: .3,
         position: [0, 20, -40],
         castShadow: false,
 

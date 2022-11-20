@@ -31,8 +31,10 @@ export default class PlayerInitialize {
   }
 
   init() {
+    if(window.location.pathname.split("/").includes("office")) return;
+
     const model = this.playerData.charFilePath || "characters/man.glb"
-    // const model = "characters/woman3.glb"
+    // const model = "characters/raccon.glb"
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(model, (gltf) => {
         const char: any = gltf.scene;
@@ -53,7 +55,7 @@ export default class PlayerInitialize {
         this.object = new THREE.Object3D();
         this.object.userData = this.playerData.charData as object;
         this.object.position.x = 0.15287136757105668
-        this.object.position.z = 23.315925775403738
+        this.object.position.z = 21.315925775403738
         this.object.add(char);
 
 

@@ -11,7 +11,7 @@ export default class Flag {
         if (i === 1) {
           const f = {
             rotation: {x: 0, y: -2.46, z: 0},
-            position: {x: 8, y: 6.5, z: 10},
+            position: {x: 8, y: 5.7, z: 10},
             frontSrc: "images/tennouji_poster.jpg",
             backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
@@ -23,7 +23,7 @@ export default class Flag {
         } else if (i === 2) {
           const f = {
             rotation: {x: 0, y: 1.2, z: 0},
-            position: {x: -12.2, y: 6.5, z: -3.5},
+            position: {x: -12.2, y: 5.7, z: -3.5},
             frontSrc: "images/tanimachi_poster.jpg",
             backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
@@ -34,7 +34,7 @@ export default class Flag {
         } else if (i === 3) {
           const f = {
             rotation: {x: 0, y: 0, z: 0},
-            position: {x: 0, y: 6.5, z: -12.5},
+            position: {x: 0, y: 5.7, z: -12.5},
             frontSrc: "images/matsuyamachi_poster.jpg",
             backSrc: "images/fukushima_poster.jpg",
 
@@ -46,7 +46,7 @@ export default class Flag {
         } else if (i === 4) {
           const f = {
             rotation: {x: 0, y: -1.3, z: 0},
-            position: {x: 12, y: 6.5, z: -3.4},
+            position: {x: 12, y:5.7, z: -3.4},
             frontSrc: "images/kitasenri_poster.jpg",
             backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
@@ -58,7 +58,7 @@ export default class Flag {
         } else if (i === 5) {
           const f = {
             rotation: {x: 0, y: -3.78, z: 0},
-            position: {x: -7, y: 6.5, z: 10.1},
+            position: {x: -7, y: 5.7, z: 10.1},
             frontSrc: "images/fukushima_poster.jpg",
             backSrc: "images/fukushima_poster.jpg",
             segW: 6.3,
@@ -98,10 +98,10 @@ export default class Flag {
 
 
   public update(): void {
-    const swing = .3
-    const speed = .2
-    const horizontal = .3
-    const vertical = 2
+    const swing = .2
+    const speed = .1
+    const horizontal = .5
+    const vertical = .3
 
     this.flags.forEach((mesh: THREE.Mesh) => {
       const positionAttribute = mesh.geometry.getAttribute('position');
@@ -117,7 +117,7 @@ export default class Flag {
         for (let y = 0; y < mesh.userData.segW + 1; y++) {
           const index = x + y * (mesh.userData.segH + 1);
           const time = Date.now() * speed / 50;
-          const value = Math.sin(vertical * x + horizontal * y - time) * swing * x / 5
+          const value = Math.sin(vertical * x + horizontal * y - time) * swing * x / 7
           positionAttribute.setZ(index, value);
         }
       }

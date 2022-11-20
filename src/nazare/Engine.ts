@@ -27,13 +27,13 @@ export default class Engine {
       self.callbacks[i]();
     }
 
-    requestAnimationFrame(this.animate.bind(self));
+    requestAnimationFrame(self.animate.bind(self));
   }
 
   start(): void {
     if (this.flag) return;
     this.flag = true;
-    requestAnimationFrame(this.animate.bind(this));
+    this.animate()
   }
 
   stop(): void {

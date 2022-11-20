@@ -26,7 +26,7 @@ import {useRoute, useRouter} from "vue-router";
 import InputText from "@/components/inputs/InputText.vue";
 import InputCharacter from "@/components/inputs/InputCharacter.vue";
 
-const characters = ["characters/man.glb", "characters/man2.glb", "characters/man3.glb", "characters/woman.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
+const characters = ["characters/man2.glb", "characters/man3.glb", "characters/woman2.glb", "characters/woman3.glb", "characters/bear.glb", "characters/fox.glb", "characters/raccon.glb"]
 
 /*
 *to display error

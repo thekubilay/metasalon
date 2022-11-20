@@ -13,9 +13,18 @@ let routes: Array<RouteRecordRaw> = [
     component: () => import('../views/SignIn.vue')
   },
   {
-    path: '/entry',
+    path: '/lobby',
     name: 'Entry',
     component: () => import('../views/Entry.vue')
+  },
+  {
+    path: '/onlines',
+    name: 'Onlines',
+    component: () => import('../views/PlayerList.vue')
+  },
+  {
+    path: '/office',
+    redirect: "login"
   },
   {
     path: '/office/:id',
@@ -29,9 +38,4 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_APP_BASE_PATH),
   routes
 })
-
-router.beforeEach((to, from) => {
-
-})
-
 export default router;

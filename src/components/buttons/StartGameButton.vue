@@ -1,7 +1,7 @@
 <template>
   <button class="start-btn">
     <span class="play-icon"></span>
-    ゲームスタート
+    ブランズメタサロンに入る
   </button>
 </template>
 
@@ -16,7 +16,8 @@ button.start-btn {
   background-color: #1C32E2;
   color: white;
   /* box-shadow: 0 0 13px 5px #fff; */
-  width: 220px;
+  width: 300px;
+  padding-bottom: 1px;
   height: 60px;
   transition: transform 0.2s;
 }

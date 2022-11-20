@@ -12,10 +12,9 @@
         class="mySwiper">
       <swiper-slide v-for="(char, idx) in characters" :key="idx">
         <p class="char"
-           :style="{backgroundImage: 'url(' + char.split('.')[0] + '.png)', backgroundSize: 'cover'}"
            :class="{active:modelValue['character'].value===char}"
            @click="selectChara(char)">
-<!--          <img :src="'/images/characters/' + char + '.png'" alt="">-->
+          <img :src="char.split('.')[0] + '.png'" alt="">
         </p>
       </swiper-slide>
       <div class="nav flex justify-center">
@@ -167,7 +166,7 @@ onMounted(() => {
 
 .chara-container .swiper .char {
   position: relative;
-  height: 100px;
+  height: 213px;
 }
 
 .chara-container .swiper .char::after {

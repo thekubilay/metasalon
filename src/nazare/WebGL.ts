@@ -79,15 +79,16 @@ export default class WebGL {
     return;
   }
 
-  private set_renderer(options = {}, pixelRatio = 1, shadow = true): void {
+  private set_renderer(options = {}, pixelRatio = .7, shadow = false): void {
     const settings = Object.assign(
       {
         canvas: this.canvas,
-        alpha: true,
-        antialias: true,
+        alpha: false,
+        antialias: false,
       },
       options,
     );
+
 
     // this.settings.renderer = settings
     this.renderer = new THREE.WebGLRenderer(settings);
@@ -97,11 +98,11 @@ export default class WebGL {
 
     this.renderer.setSize(this.sizes.width, this.sizes.height);
     this.renderer.shadowMap.enabled = shadow;
+    this.renderer.autoClear = false
     return;
   }
 
   private set_tags(headTag = true): void {
-    console.log("ok")
     this.tag.setSize(this.sizes.width, this.sizes.height);
     this.tag.domElement.style.position = 'absolute';
     this.tag.domElement.style.top = '0px';
@@ -118,10 +119,7 @@ export default class WebGL {
         height: this.sizes.height,
         near: .1,
         far: 1000,
-        position: [0.15287136757105668, 3, 30.315925775403738],
-        // this.object.position.x = -23.377386369724398
-        // this.object.position.z = -0.005241572856506738
-
+        position: [0, 3, 0],
       },
       options,
     );
@@ -146,8 +144,8 @@ export default class WebGL {
         minDistance: 5,
         maxDistance: 100,
         maxPolarAngle: Math.PI / 2 - 0.05,
-        enableZoom: true,
-        enableRotate: true,
+        enableZoom: false,
+        enableRotate: false,
         enablePan: false,
       },
       options,
@@ -178,9 +176,9 @@ export default class WebGL {
 
     /* lights */
     if (settings.ambientLight) this.scene.add(this.light.ambientLight);
-    if (settings.pointLight) this.scene.add(this.light.pointLight);
-    if (settings.pointLightHelper) this.scene.add(this.light.pointLightHelper);
-    if (settings.dirLight) this.scene.add(this.light.dirLight);
+    // if (settings.pointLight) this.scene.add(this.light.pointLight);
+    // if (settings.pointLightHelper) this.scene.add(this.light.pointLightHelper);
+    // if (settings.dirLight) this.scene.add(this.light.dirLight);
     // this.scene.add(this.light.dirLightHelper);
 
     return;

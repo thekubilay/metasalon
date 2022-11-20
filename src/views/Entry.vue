@@ -1,5 +1,22 @@
 <template>
   <div ref="world" id="world" class="stage-wrap pg">
+    <Transition appear>
+      <div id="popup" v-if="isControls" class="flex-column align-center justify-center">
+        <div class="flex-column align-center" :class="{loading:isLoading}">
+          <GameControls/>
+          <Transition mode="out-in" name="slide-fade">
+            <LoadingProgress v-if="isLoading" :percent="percentage" :text="progressTexts[currentProgressText]"/>
+            <StartGameButton v-else @click="start()"/>
+          </Transition>
+        </div>
+      </div>
+    </Transition>
+
+    <div class="menu flex justify-space-between">
+      <button @click="restart()" class="restart">リスタート</button>
+      <button @click="isControls = !isControls" class="controls">操作</button>
+      <button @click="signout()" class="exit">ログアウト</button>
+    </div>
     <PlayerCall v-if="Object.keys(world).length"/>
     <PlayerList v-if="Object.keys(world).length" :players="players"/>
     <DialogTeleport v-model="dialog"></DialogTeleport>
@@ -12,49 +29,135 @@ import PlayerCall from "@/components/player/PlayerCall.vue";
 import PlayerList from "@/components/player/PlayerList.vue";
 import DialogTeleport from "@/components/dialog/DialogTeleport.vue";
 
-import {onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {useRouter} from "vue-router";
+import {onBeforeMount, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
 import {GameSettings} from "@/types/GameSetting";
 import useStore from "@/store/useStore";
 import useMultiplayer from "@/composables/useMultiplayer";
 
 import Game from "@/nazare/Game";
 import Entry from "@/environments/entry/Entry";
+import GameControls from "@/components/GameControls.vue";
+import LoadingProgress from "@/components/loadings/LoadingProgress.vue";
+import StartGameButton from "@/components/buttons/StartGameButton.vue";
+import useLoadings from "@/composables/useLoadings";
+import * as THREE from "three";
 
 
 const {myself} = useStore();
-const {players, multiplayer} = useMultiplayer("entry")
+const {players, multiplayer, storage} = useMultiplayer("entry")
+const {
+  isLoading, isControls, percentage, currentProgressText, progressTexts,
+} = useLoadings()
 const router = useRouter()
+const route = useRoute()
 const world = ref<HTMLDivElement>({} as HTMLDivElement)
+const canvas = ref<HTMLCanvasElement>({} as HTMLCanvasElement)
 const game = new Game()
 const entry = new Entry()
 const dialog = ref<boolean>(true)
-
+const gameOn = ref<boolean>(false)
 const settings = {
+  room: "entry",
   multiplayer: multiplayer,
   rotation: true,
-  environments: [entry]
+  environments: [entry],
+  camera: {
+    position: [0, 20, 70],
+  }
 } as GameSettings
 
-onMounted(async () => {
-  await game.start(settings)
-  await document.getElementById("canvas").focus()
+
+const restart = () => {
+  game.physics.character.position.x = 0
+  game.physics.character.position.y = .5
+  game.physics.character.position.z = 21.315925775403738
+  game.playerRotationClass.object.position.x = game.physics.character.position.x
+  game.playerRotationClass.object.position.z = game.physics.character.position.z
+
+  game.playerRotationClass.cameraTarget.x = game.playerRotationClass.object.position.x as number;
+  game.playerRotationClass.cameraTarget.y = (game.playerRotationClass.object.position.y as number) + 4;
+  game.playerRotationClass.cameraTarget.z = (game.playerRotationClass.object.position.z as number) + 8;
+
+  game.camera.position.x = game.playerRotationClass.cameraTarget.x;
+  game.camera.position.z = game.playerRotationClass.cameraTarget.z;
+
+  game.orbit.target = new THREE.Vector3(
+      game.playerRotationClass.object.position.x as number,
+      game.playerRotationClass.object.position.y as number + 3,
+      game.playerRotationClass.object.position.z as number
+  );
+  game.orbit.update()
+  canvas.value.focus()
+  game.playerRotationClass.object.rotation.y = 0
+  game.playerRotationClass.object.rotation.x = 0
+  game.playerRotationClass.object.rotation.z = 0
+}
+
+const reorbit = () => {
+  game.playerRotationClass.cameraTarget.x = game.playerRotationClass.object.position.x as number;
+  game.playerRotationClass.cameraTarget.y = (game.playerRotationClass.object.position.y as number) + 4;
+  game.playerRotationClass.cameraTarget.z = (game.playerRotationClass.object.position.z as number) + 8;
+
+  game.camera.position.x = game.playerRotationClass.cameraTarget.x;
+  game.camera.position.z = game.playerRotationClass.cameraTarget.z;
+
+  game.orbit.target = new THREE.Vector3(
+      game.playerRotationClass.object.position.x as number - Math.PI /2,
+      game.playerRotationClass.object.position.y as number + 3,
+      game.playerRotationClass.object.position.z as number
+  );
+}
+
+const signout = () => {
+  router.push({name: "SignIn"})
+}
+
+const start = () => {
+  isControls.value=false
+  canvas.value.focus()
+}
+
+watch(canvas, val => {
+  if (val) {
+    setTimeout(() => {
+      canvas.value.style.visibility = "visible"
+    }, 1000)
+  }
 })
 
-onBeforeUnmount(() => {
-  game.engine.stop()
-  game.keyListener.stop()
-  game.scene.children.forEach(object => {
-    object.removeFromParent()
-  })
+watch(isControls, val => {
+  if (!val && !gameOn.value) {
+    setTimeout(() => {
+      entry.entryAnim(game)
+      gameOn.value = true
+    }, 500)
+  }
 })
 
 watch(dialog, val => {
-  if (!val){
+  if (!val) {
     game.settings.rotation = true
     setTimeout(() => {
       dialog.value = true
     }, 1000)
+  }
+})
+
+
+onBeforeMount(() => {
+  if(!window.location.hash) {
+    window.location.href = window.location + '#loaded';
+    window.location.reload();
+  }
+})
+
+
+onMounted(async () => {
+  if (storage){
+    await game.start(settings)
+  } else {
+    await router.push({name: "SignIn", query:{office:route.params.id}})
   }
 })
 
@@ -77,74 +180,49 @@ watch(dialog, val => {
   background-color: white;
 }
 
-/* Transitions */
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 1.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.5s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.7s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter-from {
-  transform: translateX(-20px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateX(10px);
-  opacity: 0;
-}
-
-
 /* GAME INSIDE
 ==================*/
 
 .stage-wrap .stage {
   position: relative;
   z-index: 1;
-  /*visibility: hidden;*/
+  visibility: hidden;
 }
 
-.stage-wrap .stage .char-nickname {
-  z-index: 2;
+
+.stage-wrap .menu {
+  position: fixed;
+  z-index: 999;
+  top: 5px;
+  right: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 4px;
+  border-radius: 6px;
 }
 
-.stage-wrap button.exit {
-  position: absolute;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  top: 10px;
-  right: 10px;
-  outline: 0;
-  border: 0;
-  background-color: #FFFFFF;
+.stage-wrap .menu button {
+  border-radius: 4px;
+  font-size: .7rem;
+  color: #FFFFFF;
+  padding: 0 5px;
+  height: 30px
 }
 
-.stage-wrap button.exit span.bar {
-  height: 2px;
-  width: 24px;
-  background-color: #000000;
-  position: relative;
+.stage-wrap .menu button.restart {
+  background-color: #0652DD;
 }
 
-.stage-wrap button.exit span.bar:nth-child(1) {
-  top: -5px;
+.stage-wrap .menu button.controls {
+  background-color: #0652DD;
+  margin-left: 5px;
 }
 
-.stage-wrap button.exit span.bar:nth-child(3) {
-  bottom: -5px;
+.stage-wrap .menu button.exit {
+  background-color: #e74c3c;
+  margin-left: 5px;
 }
 
 </style>

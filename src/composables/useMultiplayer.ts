@@ -6,7 +6,7 @@ import CharacterInfo, {Player} from "@/types/Player";
 import {MultiplayerSetting} from "@/types/GameSetting";
 import useStore from "@/store/useStore";
 
-export default function (room:string, positionUpdate=true) {
+export default function (room: string, positionUpdate = true) {
   const {myself} = useStore()
   const players = ref<Player[]>([])
   const storage = JSON.parse(sessionStorage.getItem("nzrsto") as string) as CharacterInfo
@@ -20,11 +20,12 @@ export default function (room:string, positionUpdate=true) {
         self: false,
         room: room,
         sessionID: sessionId ? sessionId : useIdGenerator(),
-        staff: storage.key,
         charNickname: storage.charNickname,
+        withStaff: false,
         charFormat: storage.charFormat,
         charFilePath: storage.charFilePath,
         audio: true,
+        key: storage?.key || null,
         charData: {
           x: 0,
           y: 0,
@@ -34,14 +35,21 @@ export default function (room:string, positionUpdate=true) {
           action: "Idle",
         }
       }
+
       SOCKET.on("self", data => {
         myself.value = data
         game.singleplayer(data)
       })
 
-      SOCKET.on("updatePositions", data => {
-        players.value = data
-        if (positionUpdate){
+      SOCKET.on("updatePositions", (data: Player[]) => {
+        players.value = data.filter(item => {
+          return room === item.room
+        })
+
+        const withStaff = players.value.some(player => player.key)
+        SOCKET.emit("updateWithStaff", withStaff)
+
+        if (positionUpdate) {
           for (let i = data.length; i--;) {
             if (data[i].socketID !== game.playerData.socketID && data[i].room === room) {
               const idx: number = game.playersInitClasses.findIndex((item: any) => item.playerData.socketID === data[i].socketID);
